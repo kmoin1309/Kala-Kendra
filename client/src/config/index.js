@@ -20,6 +20,13 @@ export const registerFormControls = [
     componentType: "input",
     type: "password",
   },
+  {
+    name: "Role",
+    label: "Role",
+    placeholder: "Buyer or Seller",
+    componentType: "input",
+    type: "text",
+  },
 ];
 
 export const loginFormControls = [

@@ -1,3 +1,5 @@
+
+require("dotenv").config(); // Load env variables at the start
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
@@ -15,18 +17,16 @@ const shopReviewRouter = require("./routes/shop/review-routes");
 
 const commonFeatureRouter = require("./routes/common/feature-routes");
 
-//create a database connection -> u can also
-//create a separate file for this and then import/use that file here
-
+// MongoDB connection
 mongoose
-  .connect(
-    "mongodb+srv://dmelloaries:Godsgift%401234@cluster0.iy49rsh.mongodb.net/ecommerce_hackathon"
-  )
+  .connect(process.env.DB_URL)
   .then(() => console.log("MongoDB connected"))
   .catch((error) => console.log(error));
 
 const app = express();
 const PORT = process.env.PORT || 5001;
+
+console.log(PORT);
 
 app.use(
   cors({
