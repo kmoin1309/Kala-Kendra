@@ -32,9 +32,9 @@ import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import { getFeatureImages } from "@/store/common-slice";
 
 const categoriesWithIcon = [
-  { id: "men", label: "Men", icon: ShirtIcon },
-  { id: "women", label: "Women", icon: CloudLightning },
-  { id: "kids", label: "Kids", icon: BabyIcon },
+  { id: "men", label: "Decor", icon: ShirtIcon },
+  { id: "women", label: "Jewellery", icon: CloudLightning },
+  { id: "kids", label: "Wall items", icon: BabyIcon },
   { id: "accessories", label: "Accessories", icon: WatchIcon },
   { id: "footwear", label: "Footwear", icon: UmbrellaIcon },
 ];

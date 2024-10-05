@@ -1,16 +1,16 @@
-import CommonForm from "@/components/common/form";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useToast } from "@/components/ui/use-toast";
+import CommonForm from "@/components/common/form";
 import { registerFormControls } from "@/config";
 import { registerUser } from "@/store/auth-slice";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
 
 const initialState = {
   userName: "",
   email: "",
   password: "",
-  role:"",
+  role: "",
 };
 
 function AuthRegister() {
@@ -36,31 +36,31 @@ function AuthRegister() {
     });
   }
 
-  console.log(formData);
-
   return (
-    <div className="mx-auto w-full max-w-md space-y-6">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">
-          Create new account
-        </h1>
-        <p className="mt-2">
-          Already have an account
-          <Link
-            className="font-medium ml-2 text-primary hover:underline"
-            to="/auth/login"
-          >
-            Login
-          </Link>
-        </p>
+    <div className="flex items-center justify-center min-h-screen ">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-2xl">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            Create new account
+          </h1>
+          <p className="mt-2 text-sm text-gray-600">
+            Already have an account?
+            <Link
+              className="ml-1 font-medium text-indigo-600 hover:text-indigo-500"
+              to="/auth/login"
+            >
+              Login
+            </Link>
+          </p>
+        </div>
+        <CommonForm
+          formControls={registerFormControls}
+          buttonText="Sign Up"
+          formData={formData}
+          setFormData={setFormData}
+          onSubmit={onSubmit}
+        />
       </div>
-      <CommonForm
-        formControls={registerFormControls}
-        buttonText={"Sign Up"}
-        formData={formData}
-        setFormData={setFormData}
-        onSubmit={onSubmit}
-      />
     </div>
   );
 }
