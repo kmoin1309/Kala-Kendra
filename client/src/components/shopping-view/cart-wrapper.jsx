@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 import UserCartItemsContent from "./cart-items-content";
+import PropTypes from "prop-types"; // Import PropTypes
 
 function UserCartWrapper({ cartItems, setOpenCartSheet }) {
   const navigate = useNavigate();
@@ -34,9 +35,8 @@ function UserCartWrapper({ cartItems, setOpenCartSheet }) {
             />
           ))
         ) : (
-          <p>Your cart is empty.</p>
-        )}{" "}
-        {/* Optional: Display message if no items */}
+          <p>Your cart is empty.</p> // Optional: Display message if no items
+        )}
       </div>
       <div className="mt-8 space-y-4">
         <div className="flex justify-between">
@@ -56,5 +56,22 @@ function UserCartWrapper({ cartItems, setOpenCartSheet }) {
     </SheetContent>
   );
 }
+
+// Define PropTypes
+UserCartWrapper.propTypes = {
+  cartItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired, // Ensure 'id' exists and is unique
+      productId: PropTypes.string.isRequired, // If used as a key
+      title: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+      price: PropTypes.number.isRequired,
+      salePrice: PropTypes.number,
+      quantity: PropTypes.number.isRequired,
+      // Add other relevant fields as per your cart item structure
+    })
+  ).isRequired,
+  setOpenCartSheet: PropTypes.func.isRequired,
+};
 
 export default UserCartWrapper;
