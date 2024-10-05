@@ -65,24 +65,22 @@ export const addProductFormElements = [
     name: "category",
     componentType: "select",
     options: [
-      { id: "men", label: "Men" },
-      { id: "women", label: "Women" },
-      { id: "kids", label: "Kids" },
-      { id: "accessories", label: "Accessories" },
+      { id: "men", label: "Decor" },
+      { id: "women", label: "Jewellery" },
+      { id: "kids", label: "Gifts" },
+      { id: "accessories", label: "Wall Arts" },
       { id: "footwear", label: "Footwear" },
     ],
   },
   {
-    label: "Brand",
+    label: "Region",
     name: "brand",
     componentType: "select",
     options: [
-      { id: "nike", label: "Nike" },
-      { id: "adidas", label: "Adidas" },
-      { id: "puma", label: "Puma" },
-      { id: "levi", label: "Levi's" },
-      { id: "zara", label: "Zara" },
-      { id: "h&m", label: "H&M" },
+      { id: "nike", label: "Marathi" },
+      { id: "adidas", label: "Rajasthani" },
+      { id: "puma", label: "Punjabi" },
+      { id: "levi", label: "Assami" },
     ],
   },
   {
@@ -170,19 +168,17 @@ export const brandOptionsMap = {
 
 export const filterOptions = {
   category: [
-    { id: "men", label: "Men" },
-    { id: "women", label: "Women" },
-    { id: "kids", label: "Kids" },
-    { id: "accessories", label: "Accessories" },
+    { id: "men", label: "Decor" },
+    { id: "women", label: "Jewellery" },
+    { id: "kids", label: "Gifts" },
+    { id: "accessories", label: "Wall Arts" },
     { id: "footwear", label: "Footwear" },
   ],
   brand: [
-    { id: "nike", label: "Nike" },
-    { id: "adidas", label: "Adidas" },
-    { id: "puma", label: "Puma" },
-    { id: "levi", label: "Levi's" },
-    { id: "zara", label: "Zara" },
-    { id: "h&m", label: "H&M" },
+    { id: "nike", label: "Marathi" },
+    { id: "adidas", label: "Rajasthani" },
+    { id: "puma", label: "Punjabi" },
+    { id: "levi", label: "Assami" },
   ],
 };
 
