@@ -2,6 +2,12 @@ import { Button } from "@/components/ui/button";
 import bannerOne from "../../assets/banner-1.webp";
 import bannerTwo from "../../assets/banner-2.webp";
 import bannerThree from "../../assets/banner-3.webp";
+import bluePot from "../../assets/blue-pot.jpeg";
+import ring from "../../assets/ring.jpeg";
+import kashmiri from "../../assets/kashmiri.jpeg";
+import ring1 from "../../assets/ring1.jpeg";
+import bg1 from "../../assets/bg1.jpeg";
+import bg2 from "../../assets/bg2.jpeg";
 import {
   Airplay,
   BabyIcon,
@@ -47,7 +53,8 @@ const brandsWithIcon = [
   { id: "zara", label: "Zara", icon: Images },
   { id: "h&m", label: "H&M", icon: Heater },
 ];
-function ShoppingHome() {
+
+const ShoppingHome = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts
@@ -114,8 +121,6 @@ function ShoppingHome() {
     );
   }, [dispatch]);
 
-  console.log(productList, "productList");
-
   useEffect(() => {
     dispatch(getFeatureImages());
   }, [dispatch]);
@@ -169,6 +174,7 @@ function ShoppingHome() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {categoriesWithIcon.map((categoryItem) => (
               <Card
+                key={categoryItem.id}
                 onClick={() =>
                   handleNavigateToListingPage(categoryItem, "category")
                 }
@@ -184,12 +190,13 @@ function ShoppingHome() {
         </div>
       </section>
 
-      <section className="py-12 bg-gray-50">
+      {/* <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">Shop by Brand</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {brandsWithIcon.map((brandItem) => (
               <Card
+                key={brandItem.id}
                 onClick={() => handleNavigateToListingPage(brandItem, "brand")}
                 className="cursor-pointer hover:shadow-lg transition-shadow"
               >
@@ -201,7 +208,9 @@ function ShoppingHome() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
+
+      <RecommendedCollections />
 
       <section className="py-12">
         <div className="container mx-auto px-4">
@@ -212,6 +221,7 @@ function ShoppingHome() {
             {productList && productList.length > 0
               ? productList.map((productItem) => (
                   <ShoppingProductTile
+                    key={productItem.id}
                     handleGetProductDetails={handleGetProductDetails}
                     product={productItem}
                     handleAddtoCart={handleAddtoCart}
@@ -228,6 +238,50 @@ function ShoppingHome() {
       />
     </div>
   );
-}
+};
+
+const RecommendedCollections = () => {
+  const backgroundStyle = {
+    backgroundImage: `url(${bg1}), url(${bg2})`,
+    backgroundSize: "cover", // Ensures the background image covers the entire area
+    backgroundPosition: "center", // Center the background image
+    padding: "2rem", // Padding to give some space around the content
+    borderRadius: "0.5rem", // Rounded corners
+    color: "white", // Text color
+  };
+
+  return (
+    <section
+      style={backgroundStyle}
+      className="py-12 text-center"
+    >
+      <h2 className="text-3xl font-bold mb-6 text-black">
+        Recommended Collections
+      </h2>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <img
+          src={bluePot}
+          alt="Blue Pot"
+          className="w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-lg hover:scale-105 transition-transform duration-300"
+        />
+        <img
+          src={kashmiri}
+          alt="Kashmiri Item"
+          className="w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-lg hover:scale-105 transition-transform duration-300"
+        />
+        <img
+          src={ring}
+          alt="Ring"
+          className="w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-lg hover:scale-105 transition-transform duration-300"
+        />
+        <img
+          src={ring1}
+          alt="Ring 1"
+          className="w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-lg hover:scale-105 transition-transform duration-300"
+        />
+      </div>
+    </section>
+  );
+};
 
 export default ShoppingHome;
