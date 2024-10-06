@@ -65,7 +65,7 @@ export const addProductFormElements = [
     name: "category",
     componentType: "select",
     options: [
-      { id: "men", label: "Decor" },
+      { id: "men", label: "All Products" },
       { id: "women", label: "Jewellery" },
       { id: "kids", label: "Gifts" },
       { id: "accessories", label: "Wall Arts" },
@@ -114,7 +114,7 @@ export const shoppingViewHeaderMenuItems = [
   },
   {
     id: "products",
-    label: "Decor",
+    label: "All Products",
     path: "/shop/listing",
   },
   {
@@ -137,16 +137,7 @@ export const shoppingViewHeaderMenuItems = [
     label: "Footwear",
     path: "/shop/listing",
   },
-  {
-    // id: "accessories",
-    // label: "Accessories",
-    // path: "/shop/listing",
-  },
-  {
-    // id: "search",
-    // label: "Search",
-    // path: "/shop/search",
-  },
+  
 ];
 
 export const categoryOptionsMap = {
@@ -168,7 +159,7 @@ export const brandOptionsMap = {
 
 export const filterOptions = {
   category: [
-    { id: "men", label: "Decor" },
+    { id: "men", label: "All Products" },
     { id: "women", label: "Jewellery" },
     { id: "kids", label: "Gifts" },
     { id: "accessories", label: "Wall Arts" },
