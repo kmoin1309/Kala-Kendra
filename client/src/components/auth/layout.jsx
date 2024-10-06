@@ -14,7 +14,7 @@ function AuthLayout() {
             Empowering Artisans
           </h1>
           <video
-            className="absolute top-0 left-0 w-auto min-w-full min-h-full max-w-none"
+            className="absolute top-0 left-[-35%] w-auto min-w-full min-h-full max-w-none transform"
             src={loginvideo}
             autoPlay
             loop
