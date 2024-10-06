@@ -70,6 +70,7 @@ export const addProductFormElements = [
       { id: "kids", label: "Gifts" },
       { id: "accessories", label: "Wall Arts" },
       { id: "footwear", label: "Footwear" },
+      
     ],
   },
   {
@@ -135,6 +136,11 @@ export const shoppingViewHeaderMenuItems = [
   {
     id: "footwear",
     label: "Footwear",
+    path: "/shop/listing",
+  },
+  {
+    id: "Trade Fairs",
+    label: "Trade Fairs",
     path: "/shop/listing",
   },
   

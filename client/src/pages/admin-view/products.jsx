@@ -138,16 +138,14 @@ function AdminProducts() {
           setFormData(initialFormData);
         }}
       >
-        <SheetContent
-          side="right"
-          className="overflow-auto"
-        >
+        <SheetContent side="right" className="overflow-auto">
           <SheetHeader>
             <SheetTitle>
               {currentEditedId !== null ? "Edit Product" : "Add New Product"}
             </SheetTitle>
           </SheetHeader>
           <ProductImageUpload
+            setFormData={setFormData}
             imageFile={imageFile}
             setImageFile={setImageFile}
             uploadedImageUrl={uploadedImageUrl}

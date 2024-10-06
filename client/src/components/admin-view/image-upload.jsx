@@ -7,6 +7,7 @@ import axios from "axios";
 import { Skeleton } from "../ui/skeleton";
 
 function ProductImageUpload({
+  setFormData,
   imageFile,
   setImageFile,
   imageLoadingState,
@@ -58,6 +59,14 @@ function ProductImageUpload({
     if (response?.data?.success) {
       setUploadedImageUrl(response.data.result.url);
       setImageLoadingState(false);
+      setFormData((prev) => {
+        return {
+          ...prev,
+          title: response.data.ImageResponse.title,
+          description: response.data.ImageResponse.description,
+          category: response.data.ImageResponse.category,
+        };
+      });
     }
   }
 

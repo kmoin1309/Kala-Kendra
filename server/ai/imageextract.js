@@ -6,10 +6,9 @@ const {
 const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
-const dotenv = require("dotenv");
 
-const apiKey = process.env.API_KEY_4;
 const genAI = new GoogleGenerativeAI("AIzaSyDMuxmy8CrJFWwDPD5SDtMsHNx163QFtmg");
+
 const safetySettings = [
   {
     category: HarmCategory.HARM_CATEGORY_HARASSMENT,
@@ -32,20 +31,23 @@ const safetySettings = [
 const imageExtract = async (imagebuffer) => {
   console.log("imageExtract");
   try {
-    const systemInstruction = `The image is an artifact or handmade product by a vendor , Scan the image extract key information from the image like:
-Title , description and category (from the given categories : Decor, Jewellery,Gifts,Walls Arts,Footwear)  
-While giving the title and description consider SEO as well.
-Required JSON format:
+    const systemInstruction = `Analyze the image provided. The image contains a handmade product or artifact from a vendor. Extract the following key details from the image:
+
+- Title of the product
+- Description of the product
+
+Output the extracted data in the following JSON format:
 {
   "title": "Handmade Wooden Art",
-  "description": "Handmade Wooden Art",
-  "category": "Decor"
-  }`;
+  "description": "A short description of the handmade wooden art product."
+}`;
+
     const model = genAI.getGenerativeModel({
       model: "gemini-1.5-flash",
       safetySettings,
       systemInstruction,
     });
+
     const generationConfig = {
       temperature: 1,
       topP: 0.95,
@@ -54,24 +56,24 @@ Required JSON format:
       response_mime_type: "application/json",
     };
 
-    const image = imagebuffer;
-
+    // The image is passed directly as a buffer
     const chatSession = model.startChat({
       generationConfig,
     });
-    
-    const prompt = `Image: ${image}`;
+
+    // You can send the image buffer directly as a prompt
+    const prompt = `Image: ${imagebuffer.toString("base64")}`; // Convert the image buffer to base64 string
 
     const result = await chatSession.sendMessage(prompt);
-    // console.log(result.response.text())
+    
     const jsonResult = JSON.parse(result.response.text());
     console.log(jsonResult);
     return jsonResult;
   } catch (e) {
-    console.log(e);
-    return null;
+    console.error("Error during image extraction:", e);
   }
 };
+
 module.exports = {
   imageExtract,
 };
