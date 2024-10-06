@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
-import bannerOne from "../../assets/banner-1.webp";
-import bannerTwo from "../../assets/banner-2.webp";
-import bannerThree from "../../assets/banner-3.webp";
 import Carde from "./Carde";
+import video from "../../assets/bg-video-vmake.mp4";
 import {
   Airplay,
   BabyIcon,
@@ -116,6 +114,20 @@ function ShoppingHome() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // const featureImageList = [
+  //   // { image: image1 }, // Image slide
+  //   { video: video }, // Video slide
+  //   // { image: image2 }, // Another image slide
+  // ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % featureImageList.length);
+    }, 15000);
+
+    return () => clearInterval(timer);
+  }, [featureImageList]);
+
   function handleNavigateToListingPage(getCurrentItem, section) {
     sessionStorage.removeItem("filters");
     const currentFilter = {
@@ -173,86 +185,81 @@ function ShoppingHome() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Feature Image Carousel */}
+      {/* Feature Video Carousel */}
+      {/* Feature Video */}
       <div className="relative w-full h-[600px] overflow-hidden">
-        {featureImageList && featureImageList.length > 0
-          ? featureImageList.map((slide, index) => (
-              <img
-                src={slide?.image}
-                key={index}
-                className={`${
-                  index === currentSlide ? "opacity-100" : "opacity-0"
-                } absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000`}
-                alt={`Slide ${index + 1}`}
-              />
-            ))
-          : null}
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() =>
-            setCurrentSlide(
-              (prevSlide) =>
-                (prevSlide - 1 + featureImageList.length) %
-                featureImageList.length
-            )
-          }
-          className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80"
-        >
-          <ChevronLeftIcon className="w-4 h-4" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() =>
-            setCurrentSlide(
-              (prevSlide) => (prevSlide + 1) % featureImageList.length
-            )
-          }
-          className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/80"
-        >
-          <ChevronRightIcon className="w-4 h-4" />
-        </Button>
+        <video
+          src={video}
+          className="w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+        />
       </div>
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() =>
+          setCurrentSlide(
+            (prevSlide) =>
+              (prevSlide - 1 + featureImageList.length) %
+              featureImageList.length
+          )
+        }
+        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-transparent border-0 hover:bg-white/20"
+      >
+        <ChevronLeftIcon className="w-4 h-4" />
+      </Button>
+
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() =>
+          setCurrentSlide(
+            (prevSlide) => (prevSlide + 1) % featureImageList.length
+          )
+        }
+        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-transparent border-0 hover:bg-white/20"
+      >
+        <ChevronRightIcon className="w-4 h-4" />
+      </Button>
 
       {/* Cards Section */}
       <div>
         <Carde />
       </div>
+
       <div
         className="bg-cover bg-center py-1"
         style={{ backgroundImage: `url(${bg1})` }}
       >
-        {/* Your content goes here */}
-
         {/* Recommended Collections */}
         <RecommendedCollections />
-        </div>
+      </div>
 
-        {/* Feature Products */}
-        
-        <section className="py-1">
-
-        
-          <div className="container mx-auto px-4">
-            <h2 className="text-4xl text-center font-bold mb-6 text-orange-600" style={{ fontFamily: 'Brush Script MT, cursive' }}>
-              Feature Products
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {productList && productList.length > 0
-                ? productList.map((productItem) => (
-                    <ShoppingProductTile
-                      key={productItem.id}
-                      handleGetProductDetails={handleGetProductDetails}
-                      product={productItem}
-                      handleAddtoCart={handleAddtoCart}
-                    />
-                  ))
-                : null}
-            </div>
+      {/* Feature Products */}
+      <section className="py-1">
+        <div className="container mx-auto px-4">
+          <h2
+            className="text-4xl text-center font-bold mb-6 text-orange-600"
+            style={{ fontFamily: "Brush Script MT, cursive" }}
+          >
+            Feature Products
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {productList && productList.length > 0
+              ? productList.map((productItem) => (
+                  <ShoppingProductTile
+                    key={productItem.id}
+                    handleGetProductDetails={handleGetProductDetails}
+                    product={productItem}
+                    handleAddtoCart={handleAddtoCart}
+                  />
+                ))
+              : null}
           </div>
-        </section>
-      
+        </div>
+      </section>
     </div>
   );
 }
