@@ -1,4 +1,9 @@
 const Address = require("../../models/Address");
+const sendMessage = require("../../ai/chatbotres.js")
+const paypal = require("../../helpers/paypal");
+const Order = require("../../models/Order");
+const Cart = require("../../models/Cart");
+const Product = require("../../models/Product");
 
 const addAddress = async (req, res) => {
   try {
@@ -7,7 +12,7 @@ const addAddress = async (req, res) => {
     if (!userId || !address || !city || !pincode || !phone || !notes) {
       return res.status(400).json({
         success: false,
-        message: "Invalid data provided!",
+        message: "Invalid data provided!", 
       });
     }
 
@@ -133,4 +138,51 @@ const deleteAddress = async (req, res) => {
   }
 };
 
-module.exports = { addAddress, editAddress, fetchAllAddress, deleteAddress };
+const ChatBot = async (req, res) => {
+
+  const { message } = req.body;
+  console.log("message",message)
+  try {
+    const { userId } = req.params;
+    console.log("userId",userId)
+
+    const orders = await Order.find({});
+    console.log("orders",orders)
+    
+    if (!orders.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No orders found!",
+      });
+    }
+    // const product = await Product.findById({userId});
+    // console.log("product",product)
+    const UserOrders = await Order.find({userId});
+
+    if (!UserOrders)
+      return res.status(404).json({
+        success: false,
+        message: "Product not found!",
+      });
+  const response = await sendMessage(message,UserOrders,orders)
+  console.log("response",response)
+    if(response){
+      return res.status(200).json({
+        success: true,
+        data: response,
+      });
+    } 
+    // res.status(200).json({
+    //   success: true,
+    //   data: response,
+    // });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      success: false,
+      message: "Some error occured!",
+    });
+  }
+};
+
+module.exports = { addAddress, editAddress, fetchAllAddress, deleteAddress,ChatBot };

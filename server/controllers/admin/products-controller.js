@@ -1,19 +1,23 @@
 const { imageUploadUtil } = require("../../helpers/cloudinary");
 const Product = require("../../models/Product");
+const {imageExtract} = require('../../ai/imageextract.js');
+const Distributed = require('../../ai/instances.js');
 
 const handleImageUpload = async (req, res) => {
   try {
     const b64 = Buffer.from(req.file.buffer).toString("base64");
     const url = "data:" + req.file.mimetype + ";base64," + b64;
     const result = await imageUploadUtil(url);
-
-    res.json({
+   const ImageResponse = await Distributed(b64)
+   console.log(ImageResponse, "ImageResponse3")
+   return res.json({
       success: true,
       result,
+      ImageResponse
     });
   } catch (error) {
     console.log(error);
-    res.json({
+    return res.json({
       success: false,
       message: "Error occured",
     });
@@ -48,7 +52,7 @@ const addProduct = async (req, res) => {
       totalStock,
       averageReview,
     });
-
+     
     await newlyCreatedProduct.save();
     res.status(201).json({
       success: true,
