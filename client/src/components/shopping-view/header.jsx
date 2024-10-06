@@ -1,5 +1,10 @@
 import { HousePlug, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
-import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +23,7 @@ import UserCartWrapper from "./cart-wrapper";
 import { useEffect, useState } from "react";
 import { fetchCartItems } from "@/store/shop/cart-slice";
 import { Label } from "../ui/label";
+import Fair from "./fair"; // Importing the Fair component
 
 // Component: MenuItems
 function MenuItems() {
@@ -65,6 +71,7 @@ function HeaderRightContent() {
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.shopCart);
   const [openCartSheet, setOpenCartSheet] = useState(false);
+  const [isFairVisible, setIsFairVisible] = useState(false); // State for Fair component visibility
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -76,10 +83,17 @@ function HeaderRightContent() {
     dispatch(fetchCartItems(user?.id));
   }, [dispatch]);
 
+  const toggleFairComponent = () => {
+    setIsFairVisible((prev) => !prev);
+  };
+
   return (
     <div className="flex items-center gap-4 lg:gap-6">
       {/* Cart Button */}
-      <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+      <Sheet
+        open={openCartSheet}
+        onOpenChange={() => setOpenCartSheet(false)}
+      >
         <Button
           onClick={() => setOpenCartSheet(true)}
           variant="outline"
@@ -102,6 +116,15 @@ function HeaderRightContent() {
         />
       </Sheet>
 
+      {/* Show Fair Button */}
+      <Button
+        onClick={toggleFairComponent}
+        variant="outline"
+        className="hover:bg-[#de4227] hover:text-white transition-colors"
+      >
+        Fair
+      </Button>
+
       {/* User Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -111,7 +134,10 @@ function HeaderRightContent() {
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent side="right" className="w-56">
+        <DropdownMenuContent
+          side="right"
+          className="w-56"
+        >
           <DropdownMenuLabel>Logged in as {user?.userName}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => navigate("/shop/account")}>
@@ -125,6 +151,23 @@ function HeaderRightContent() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {/* Conditional rendering of the Fair component */}
+      {isFairVisible && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75">
+          <div className="bg-white w-[90%] h-[70%] max-w-[1200px] max-h-[800px] p-6 rounded-lg shadow-lg overflow-y-auto">
+            {/* Fair Component */}
+            <Fair />
+            <Button
+              onClick={toggleFairComponent}
+              className="mt-4"
+              variant="outline"
+            >
+              Close
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -134,38 +177,50 @@ function ShoppingHeader() {
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-white shadow-md">
-      <div className="container mx-auto flex items-center justify-between px-4 py-3 md:px-6">
-        <Link to="/shop/home" className="flex items-center gap-2">
-          <HousePlug className="h-6 w-6 text-[#de4227]" />
-          <span className="text-xl font-bold text-[#de4227]">KalaKendra</span>
-        </Link>
+    <>
+      <header className="sticky top-0 z-40 w-full border-b bg-white shadow-md">
+        <div className="container mx-auto flex items-center justify-between px-4 py-3 md:px-6">
+          <Link
+            to="/shop/home"
+            className="flex items-center gap-2"
+          >
+            <HousePlug className="h-6 w-6 text-[#de4227]" />
+            <span className="text-xl font-bold text-[#de4227]">KalaKendra</span>
+          </Link>
 
-        {/* Mobile Menu */}
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="lg:hidden">
-              <Menu className="h-6 w-6" />
-              <span className="sr-only">Toggle header menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-full max-w-xs bg-white">
+          {/* Mobile Menu */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="lg:hidden"
+              >
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Toggle header menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent
+              side="left"
+              className="w-full max-w-xs bg-white"
+            >
+              <MenuItems />
+              <HeaderRightContent />
+            </SheetContent>
+          </Sheet>
+
+          {/* Desktop Menu */}
+          <div className="hidden lg:flex items-center gap-8">
             <MenuItems />
+          </div>
+
+          {/* Right Content (Cart, User Profile) */}
+          <div className="hidden lg:flex">
             <HeaderRightContent />
-          </SheetContent>
-        </Sheet>
-
-        {/* Desktop Menu */}
-        <div className="hidden lg:flex items-center gap-8">
-          <MenuItems />
+          </div>
         </div>
-
-        {/* Right Content (Cart, User Profile) */}
-        <div className="hidden lg:flex">
-          <HeaderRightContent />
-        </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 }
 
