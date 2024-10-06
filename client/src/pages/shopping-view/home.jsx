@@ -2,12 +2,7 @@ import { Button } from "@/components/ui/button";
 import bannerOne from "../../assets/banner-1.webp";
 import bannerTwo from "../../assets/banner-2.webp";
 import bannerThree from "../../assets/banner-3.webp";
-import bluePot from "../../assets/blue-pot.jpeg";
-import ring from "../../assets/ring.jpeg";
-import kashmiri from "../../assets/kashmiri.jpeg";
-import ring1 from "../../assets/ring1.jpeg";
-import bg1 from "../../assets/bg1.jpeg";
-import bg2 from "../../assets/bg2.jpeg";
+import Carde from "./Carde";
 import {
   Airplay,
   BabyIcon,
@@ -36,9 +31,14 @@ import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 import { useToast } from "@/components/ui/use-toast";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import { getFeatureImages } from "@/store/common-slice";
+import bluePot from "../../assets/blue-pot.jpeg"; // Example image
+import ring from "../../assets/ring.jpeg"; // Example image
+import kashmiri from "../../assets/kashmiri.jpeg"; // Example image
+import ring1 from "../../assets/ring1.jpeg"; // Example image
+import bg1 from "../../assets/bg1.jpeg";
 
 const categoriesWithIcon = [
-  { id: "men", label: "Decor", icon: ShirtIcon },
+  { id: "men", label: "All Products", icon: ShirtIcon },
   { id: "women", label: "Jewellery", icon: CloudLightning },
   { id: "kids", label: "Wall items", icon: BabyIcon },
   { id: "accessories", label: "Accessories", icon: WatchIcon },
@@ -54,15 +54,62 @@ const brandsWithIcon = [
   { id: "h&m", label: "H&M", icon: Heater },
 ];
 
-const ShoppingHome = () => {
+// Component: RecommendedCollections
+//import React from 'react';
+//import { Card, CardContent } from "@/components/ui/card";
+//import bluePot from "../../assets/blue-pot.jpeg";
+//import ring from "../../assets/ring.jpeg";
+// import kashmiri from "../../assets/kashmiri.jpeg";
+// import ring1 from "../../assets/ring1.jpeg";
+
+const collections = [
+  { id: "decor", label: "Decor", image: bluePot },
+  { id: "jewellery", label: "Jewellery", image: ring },
+  { id: "wall-items", label: "Wall Items", image: kashmiri },
+  { id: "accessories", label: "Accessories", image: ring1 },
+];
+
+const RecommendedCollections = () => {
+  return (
+    <section className="py-12 text-center">
+      <h2 className="text-4xl font-bold mb-6 text-orange-600" style={{ fontFamily: 'Brush Script MT, cursive' }}>
+        Recommended Collections
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {collections.map((collection) => (
+          <Card 
+            key={collection.id}
+            className="cursor-pointer overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+          >
+            <div className="relative group">
+              <img 
+                src={collection.image} 
+                alt={collection.label} 
+                className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <div className="text-white text-center">
+                  <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Palatino, serif' }}>{collection.label}</h3>
+                  <p className="text-sm font-bold uppercase tracking-wider">Explore Collection</p>
+                </div>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+
+// Component: ShoppingHome
+function ShoppingHome() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts
   );
   const { featureImageList } = useSelector((state) => state.commonFeature);
-
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
-
   const { user } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
@@ -74,7 +121,6 @@ const ShoppingHome = () => {
     const currentFilter = {
       [section]: [getCurrentItem.id],
     };
-
     sessionStorage.setItem("filters", JSON.stringify(currentFilter));
     navigate(`/shop/listing`);
   }
@@ -127,6 +173,7 @@ const ShoppingHome = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
+      {/* Feature Image Carousel */}
       <div className="relative w-full h-[600px] overflow-hidden">
         {featureImageList && featureImageList.length > 0
           ? featureImageList.map((slide, index) => (
@@ -136,6 +183,7 @@ const ShoppingHome = () => {
                 className={`${
                   index === currentSlide ? "opacity-100" : "opacity-0"
                 } absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000`}
+                alt={`Slide ${index + 1}`}
               />
             ))
           : null}
@@ -166,122 +214,47 @@ const ShoppingHome = () => {
           <ChevronRightIcon className="w-4 h-4" />
         </Button>
       </div>
-      <section className="py-12 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">
-            Shop by category
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {categoriesWithIcon.map((categoryItem) => (
-              <Card
-                key={categoryItem.id}
-                onClick={() =>
-                  handleNavigateToListingPage(categoryItem, "category")
-                }
-                className="cursor-pointer hover:shadow-lg transition-shadow"
-              >
-                <CardContent className="flex flex-col items-center justify-center p-6">
-                  <categoryItem.icon className="w-12 h-12 mb-4 text-primary" />
-                  <span className="font-bold">{categoryItem.label}</span>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* <section className="py-12 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">Shop by Brand</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {brandsWithIcon.map((brandItem) => (
-              <Card
-                key={brandItem.id}
-                onClick={() => handleNavigateToListingPage(brandItem, "brand")}
-                className="cursor-pointer hover:shadow-lg transition-shadow"
-              >
-                <CardContent className="flex flex-col items-center justify-center p-6">
-                  <brandItem.icon className="w-12 h-12 mb-4 text-primary" />
-                  <span className="font-bold">{brandItem.label}</span>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section> */}
+      {/* Cards Section */}
+      <div>
+        <Carde />
+      </div>
+      <div
+        className="bg-cover bg-center py-1"
+        style={{ backgroundImage: `url(${bg1})` }}
+      >
+        {/* Your content goes here */}
 
-      <RecommendedCollections />
-
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">
-            Feature Products
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {productList && productList.length > 0
-              ? productList.map((productItem) => (
-                  <ShoppingProductTile
-                    key={productItem.id}
-                    handleGetProductDetails={handleGetProductDetails}
-                    product={productItem}
-                    handleAddtoCart={handleAddtoCart}
-                  />
-                ))
-              : null}
-          </div>
+        {/* Recommended Collections */}
+        <RecommendedCollections />
         </div>
-      </section>
-      <ProductDetailsDialog
-        open={openDetailsDialog}
-        setOpen={setOpenDetailsDialog}
-        productDetails={productDetails}
-      />
+
+        {/* Feature Products */}
+        
+        <section className="py-1">
+
+        
+          <div className="container mx-auto px-4">
+            <h2 className="text-4xl text-center font-bold mb-6 text-orange-600" style={{ fontFamily: 'Brush Script MT, cursive' }}>
+              Feature Products
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {productList && productList.length > 0
+                ? productList.map((productItem) => (
+                    <ShoppingProductTile
+                      key={productItem.id}
+                      handleGetProductDetails={handleGetProductDetails}
+                      product={productItem}
+                      handleAddtoCart={handleAddtoCart}
+                    />
+                  ))
+                : null}
+            </div>
+          </div>
+        </section>
+      
     </div>
   );
-};
-
-const RecommendedCollections = () => {
-  const backgroundStyle = {
-    backgroundImage: `url(${bg1}), url(${bg2})`,
-    backgroundSize: "cover", // Ensures the background image covers the entire area
-    backgroundPosition: "center", // Center the background image
-    padding: "2rem", // Padding to give some space around the content
-    borderRadius: "0.5rem", // Rounded corners
-    color: "white", // Text color
-  };
-
-  return (
-    <section
-      style={backgroundStyle}
-      className="py-12 text-center"
-    >
-      <h2 className="text-3xl font-bold mb-6 text-black">
-        Recommended Collections
-      </h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <img
-          src={bluePot}
-          alt="Blue Pot"
-          className="w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-lg hover:scale-105 transition-transform duration-300"
-        />
-        <img
-          src={kashmiri}
-          alt="Kashmiri Item"
-          className="w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-lg hover:scale-105 transition-transform duration-300"
-        />
-        <img
-          src={ring}
-          alt="Ring"
-          className="w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-lg hover:scale-105 transition-transform duration-300"
-        />
-        <img
-          src={ring1}
-          alt="Ring 1"
-          className="w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-lg hover:scale-105 transition-transform duration-300"
-        />
-      </div>
-    </section>
-  );
-};
+}
 
 export default ShoppingHome;
